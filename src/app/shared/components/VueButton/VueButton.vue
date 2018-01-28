@@ -9,6 +9,7 @@
   import VueLoader from '../VueLoader/VueLoader';
 
   export default {
+    name: 'VueButton',
     props: {
       primary: {
         type: Boolean,

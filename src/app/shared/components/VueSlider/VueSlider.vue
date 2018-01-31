@@ -1,9 +1,13 @@
 <template>
   <div :class="$style.vueSlider" ref="slider">
+    <ul :class="$style.values">
+      <li>{{formatValue(currentMin)}}</li>
+      <li>{{formatValue(currentMax)}}</li>
+    </ul>
     <div :class="$style.track">
       <div :class="$style.progress" :style="{width: progressWidth, marginLeft: progressLeft}"></div>
       <button
-        :class="$style.handle"
+        :class="handleCssClasses(0)"
         :style="{left: handleLeftPosition}"
         @mousedown="moveStart($event, 0)"
         @touchstart="moveStart($event, 0)"
@@ -16,7 +20,7 @@
         type="button"
       ></button>
       <button
-        :class="$style.handle"
+        :class="handleCssClasses(1)"
         :style="{left: handleRightPosition}"
         @mousedown="moveStart($event, 1)"
         @touchstart="moveStart($event, 1)"
@@ -48,6 +52,12 @@
       values: {
         type: Array,
         required: true,
+      },
+      formatValue: {
+        type: Function,
+        required: false,
+        default: () => {
+        },
       },
     },
     data(): any {
@@ -120,7 +130,16 @@
       },
       refresh() {
         this.sliderBox = this.$refs.slider.getBoundingClientRect();
-      }
+      },
+      handleCssClasses(index: number = 0) {
+        const classes: string[] = [this.$style.handle];
+
+        if (index === this.currentSlider) {
+          classes.push(this.$style.active)
+        }
+
+        return classes
+      },
     },
     mounted() {
       this.currentMin = this.values ? this.values[0] : 0;
@@ -173,8 +192,27 @@
 
     transition:       box-shadow $transition-duration / 2 ease-in-out;
 
-    &:hover, &:active, &:focus {
+    &.active {
       box-shadow: 0 0 0 8px rgba(red($brand-accent), green($brand-accent), blue($brand-accent), .5);
+    }
+  }
+
+  .values {
+    list-style: none;
+    padding:    0;
+    margin:     0 0 40px -16px;
+    display:    flex;
+
+    li {
+      display: inline-flex;
+
+      &:first-child {
+        &:after {
+          content: "-";
+          display: inline-block;
+          margin:  0 8px;
+        }
+      }
     }
   }
 </style>

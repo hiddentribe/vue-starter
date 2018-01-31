@@ -180,7 +180,11 @@
           :max="200"
           :values="[0, 200]"
           @change="sliderChange"
+          :formatValue="formatSliderValue"
         />
+      </vue-grid-item>
+
+      <vue-grid-item>
       </vue-grid-item>
     </vue-grid>
   </div>
@@ -237,7 +241,10 @@
     methods: {
       sliderChange(sliderOptions: any) {
         console.log(sliderOptions);
-      }
+      },
+      formatSliderValue(value: number) {
+        return `${Math.floor(value)}%`;
+      },
     }
   };
 </script>
